@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: mi_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  api:
+    build: .
+    image: luirro777/mi-api-rest:1.0
+    container_name: mi-api-rest-container
+    ports:
+      - "3000:3000"    
+    depends_on:
+      - db
+
+volumes:
+  db-data:

@@ -1,0 +1,32 @@
+# Ignorar node_modules y cualquier carpeta que pueda contener dependencias no necesarias para la imagen final
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignorar carpetas de pruebas y archivos de configuración específicos
+test/
+coverage/
+*.spec.js
+*.test.js
+
+# Ignorar archivos de control de versiones
+.git
+.gitignore
+
+# Ignorar archivos de entorno local
+.env
+.env.local
+.env.development
+.env.test
+
+# Ignorar archivos de configuración del editor
+.vscode/
+.idea/
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de Docker que no se requieren en la imagen final
+Dockerfile
+docker-compose.yml

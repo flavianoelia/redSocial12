@@ -24,9 +24,14 @@ const swaggerOptions = {
         security: [{
             ApiTokenAuth: [], // Define ApiTokenAuth como seguridad por defecto
         }],
+        tags: [  // Etiquetas para organizar los endpoints en Swagger UI
+            { name: "Usuarios", description: "Gestión de usuarios" },
+            { name: "Following", description: "Gestión de relaciones de seguimiento" },
+            { name: "Posts", description: "Gestión de publicaciones" },
+        ],
     },
     apis: ["./routes/*.js"], // Ruta a tus archivos de rutas
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-module.exports = swaggerDocs;
+module.exports = swaggerDocs

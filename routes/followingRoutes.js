@@ -6,9 +6,9 @@ const auth = require("../middlewares/authmiddleware");
 
 /**
  * @swagger
- * /usuarios/follow:
+ * /followings/follow:
  *   post:
- *     tags: [Usuarios]
+ *     tags: [Following]
  *     summary: Follow a user
  *     requestBody:
  *       required: true
@@ -29,13 +29,13 @@ const auth = require("../middlewares/authmiddleware");
  *       500:
  *         description: Internal server error
  */
-router.post("/", auth, followingController.follow);
+router.post("/follow", auth, followingController.follow);
 
 /**
  * @swagger
- * /usuarios/following:
+ * /followings/following:
  *   get:
- *     tags: [Usuarios]
+ *     tags: [Following]
  *     summary: Get the list of users the current user is following
  *     responses:
  *       200:
@@ -58,8 +58,8 @@ router.post("/", auth, followingController.follow);
  *       500:
  *         description: Internal server error
  */
-router.get("/getfollowing", auth, followingController.getfollowing)
+router.get("/following", auth, followingController.getFollowing)
 
 
-router.delete("/unfollow", auth, followingController.unfollow)
+// router.delete("/unfollow", auth, followingController.unfollow)
 module.exports = router;

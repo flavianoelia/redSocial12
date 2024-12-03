@@ -54,7 +54,7 @@ const getFollowing = async(req, res) => {
             return res.status(404).send({ error: 'Usuario no encontrado' });
         }
 
-        if (usuario.seguido.length === 0) {
+        if (!usuario.seguidos || usuario.seguidos.length === 0) {
             return res.status (404).send({message: "No hay usuarios seguidos"})
         }
         // si la respuesta es exitosa con los usuarios seguidos
@@ -64,10 +64,100 @@ const getFollowing = async(req, res) => {
     }
 };
 
+const unfollow = async (req, res) => {
+    const id_usuario = req.user.id; // Usuario autenticado
+    const { id_usuario_seguido } = req.body; // Usuario al que desea dejar de seguir
+
+    try {
+        const deleted = await db.Following.destroy({
+            where: { id_usuario, id_usuario_seguido },
+        });
+
+        if (!deleted) {
+            return res.status(404).send({ message: "Relación no encontrada" });
+        }
+
+        res.status(200).send({ message: "Has dejado de seguir al usuario" });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
+
+const getFollowers = async (req, res) => {
+    const id_usuario = req.user.id;
+
+    try {
+        const usuario = await db.Usuario.findByPk(id_usuario, {
+            include: [{
+                model: db.Usuario,
+                as: 'seguidores', // Relación definida en el modelo
+                attributes: ['id', 'nombre', 'nickname'],
+                through: { attributes: [] },
+            }],
+        });
+
+        if (!usuario) {
+            return res.status(404).send({ error: "Usuario no encontrado" });
+        }
+
+        if (usuario.seguidores.length === 0) {
+            return res.status(404).send({ message: "No tienes seguidores" });
+        }
+
+        res.status(200).send(usuario.seguidores);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
 
 
+const getMutuals = async (req, res) => {
+    const id_usuario = req.user.id;
+
+    try {
+        // Buscar usuarios seguidos y seguidores
+        const usuario = await db.Usuario.findByPk(id_usuario, {
+            include: [
+                {
+                    model: db.Usuario,
+                    as: 'seguidos',
+                    attributes: ['id'],
+                    through: { attributes: [] },
+                },
+                {
+                    model: db.Usuario,
+                    as: 'seguidores',
+                    attributes: ['id'],
+                    through: { attributes: [] },
+                },
+            ],
+        });
+
+        if (!usuario) {
+            return res.status(404).send({ message: "Usuario no encontrado" });
+        }
+
+        // Encontrar relaciones mutuas
+        const seguidosIds = usuario.seguidos.map(user => user.id);
+        const seguidoresIds = usuario.seguidores.map(user => user.id);
+        const mutualsIds = seguidosIds.filter(id => seguidoresIds.includes(id));
+
+        // Obtener información de usuarios mutuos
+        const mutuals = await db.Usuario.findAll({
+            where: { id: mutualsIds },
+            attributes: ['id', 'nombre', 'nickname'],
+        });
+
+        res.status(200).send(mutuals);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
 
 module.exports = {
     follow,
-    getFollowing
+    getFollowing,
+    unfollow,
+    getFollowers,
+    getMutuals,
 };

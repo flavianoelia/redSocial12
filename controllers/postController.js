@@ -125,5 +125,11 @@ const getUserPosts = async (req, res) => {
 };
 
 module.exports ={
+    createPost,
+    listPosts,
+    updatePost,
+    deletePost,
+    getPost,
+    getUserPosts
 
 }

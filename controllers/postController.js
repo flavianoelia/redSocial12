@@ -105,6 +105,11 @@ const getUserPosts = async (req, res) => {
     const id_usuario = req.user.id; // Usuario autenticado
 
     try {
+        // Si el usuario autenticado solicita sus propios posts, permíteselo
+        if (id_usuario === parseInt(id)) {
+            const ownPosts = await db.Post.findAll({ where: { id_usuario } });
+            return res.status(200).send(ownPosts);
+        }
         // Verificar si sigo al usuario
         const isFollowed = await db.Following.findOne({
             where: { id_usuario, id_usuario_seguido: id },
@@ -113,16 +118,16 @@ const getUserPosts = async (req, res) => {
         if (!isFollowed) {
             return res.status(403).send({ message: "No tienes permiso para ver estas publicaciones" });
         }
-
+        // Obtener las publicaciones del usuario objetivo
         const posts = await db.Post.findAll({
             where: { id_usuario: id },
         });
-
         res.status(200).send(posts);
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
 };
+
 
 module.exports ={
     createPost,

@@ -185,44 +185,6 @@ router.get("/list", usuarioController.list);
 */
 router.post("/login", usuarioController.login);
 
-/**
- * @swagger
- * /usuarios/login:
- *   post:
- *     tags: [Usuarios]
- *     summary: login user
- *     requestBody:
- *       required: true
- *       content:
- *         application/x-www-form-urlencoded:
- *           schema:
- *             type: object
- *             properties:
- *               mail:
- *                 type: string
- *                 format: email
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: token create successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 nombre:
- *                   type: string
- *                 mail:
- *                   type: string
- *       404:
- *          description:  user not found
- *       400:
- *         description: Bad request - password incorrecto
- *       500:
- *         description: Internal server error
-*/
+
 
 module.exports = router;

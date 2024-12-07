@@ -107,7 +107,7 @@ const login = async(req, res) => {
         if (!isMatch) {
             return res.status(400).send({ message: "Password incorrecto" });
         }
-        //3 - Crear token
+        //3 - Crear token (guarda id, nombre y mail)
         const token = jwt.sign({
             id: usuario.id,
             nombre: usuario.nombre,

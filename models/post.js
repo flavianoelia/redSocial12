@@ -8,18 +8,18 @@ const Post = (sequelize, Sequelize) => {
                 key: 'id', // Clave primaria del modelo Usuario
             },
             onUpdate: 'CASCADE', // Actualiza en cascada si cambia el id del usuario
-            onDelete: 'CASCADE', // Elimina los posts si se elimina el usuario            
+            onDelete: 'CASCADE', // Elimina los posts si se elimina el usuario
         },
         titulo: {
             type: Sequelize.STRING,
-            allowNull: false,            
-        }, 
+            allowNull: false,
+        },
         contenido: {
             type: Sequelize.TEXT,
-            allowNull: false,            
-        },         
+            allowNull: false,
+        },
     }, {
-        timestamps: false,
+        timestamps: false, // true si queremos q se vea en swagger el tiempo
     });
 };
 

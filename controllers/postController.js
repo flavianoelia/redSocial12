@@ -122,6 +122,9 @@ const getUserPosts = async (req, res) => {
         const posts = await db.Post.findAll({
             where: { id_usuario: id },
         });
+        if (posts.length === 0) {
+            return res.status(200).send({ message: "El usuario no tiene publicaciones" });
+        }
         res.status(200).send(posts);
     } catch (error) {
         res.status(500).send({ error: error.message });

@@ -27,7 +27,7 @@ const Usuario = (sequelize, Sequelize) => {
         },
     }, {
         timestamps: true,// Habilita la creación automática de los campos createdAt y updatedAt en el modelo
-        hooks: { //interviene para hashear o encriptar la contraseña y no se guarde enb texto plano
+        hooks: { //interviene para hashear o encriptar la contraseña y no se guarde en texto plano
             // Hook que se ejecuta antes de crear un nuevo registro de Usuario
             beforeCreate: async(Usuario) => {
                 if (Usuario.password) { // Si el campo password está presente
@@ -38,7 +38,7 @@ const Usuario = (sequelize, Sequelize) => {
             // Hook que se ejecuta antes de actualizar un registro de Usuario
             beforeUpdate: async(Usuario) => { 
                 if (Usuario.changed("password")) { // Si el campo password ha cambiado
-                    const salt = await bcrypt.genSalt(10); // Genera una sal con un factor de costo de 10
+                    const salt = await bcrypt.genSalt(10); // Genera una sal con un factor de costo de 10( es el valor predeterminado en bcrypt)
                     Usuario.password = await bcrypt.hash(Usuario.password, salt); // Hashea la nueva contraseña con la sal generada
                 }
             },

@@ -41,4 +41,4 @@ db.Usuario.belongsToMany(db.Usuario, {
 });
 
 
-module.exports = db; // exporto la db almacenada en la variable db
+module.exports = db; // Exporta el objeto db que contiene los modelos y la instancia de Sequelize para que puedan ser utilizados en otras partes de la aplicación.

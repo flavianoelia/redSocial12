@@ -1,11 +1,11 @@
-const multer = require('multer'); // importa el módulo multer para la gestión de archivos
-const path = require('path'); // importa el módulo path para trabajar con rutas de archivos y directorios
+const multer = require('multer'); // importa el módulo multer para la gestión de archivos. Es un middleware para Node.js utilizado para gestionar la subida de archivos en aplicaciones Express.
+const path = require('path'); // Es un módulo nativo de Node.js utilizado para trabajar con rutas de archivos y directorios.
 
 // Configuración del almacenamiento de imágenes con multer
 const storage = multer.diskStorage({ // configura el almacenamiento en disco para los archivos subidos
-    destination: function(req, file, cb) { // 
-        cb(null, 'uploads/avatars'); // define la carpeta de destino para las imágenes subidas
-    },
+    destination: function(req, file, cb) { // define la carpeta de destino para las imágenes subidas
+        cb(null, 'uploads/avatars'); // función de callback devuelve la llamada q se utiliza para indicar a multer dónde almacenar los archivos
+    }, // el primer argumento null es para el error, indica que no hay ningún error y q el proceso puede continuar, degundo argumento, es la ruta al directorio donde se almacenarán los archivos
     filename: function(req, file, cb) { // define el nombre del archivo subido, utilizando un sufijo único basado en la fecha y un número aleatorio, y manteniendo la extensión original del archivo
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const ext = path.extname(file.originalname); // Obtener la extensión del archivo

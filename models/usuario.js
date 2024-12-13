@@ -33,7 +33,7 @@ const Usuario = (sequelize, Sequelize) => {
                 if (Usuario.password) { // Si el campo password está presente
                     const salt = await bcrypt.genSalt(10); // Genera un sal con un factor de costo de 10
                     Usuario.password = await bcrypt.hash(Usuario.password, salt); // Hashea la contraseña con la sal generada
-                }
+                } // sal, valor aleatorio q se añade a la contraseña antes de aplicar la función de hash
             },
             // Hook que se ejecuta antes de actualizar un registro de Usuario
             beforeUpdate: async(Usuario) => { 

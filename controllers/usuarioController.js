@@ -63,29 +63,29 @@ const update = async(req, res) => {
 
 const list = async(req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1; // obtiene el número de página de la consulta, por defecto 1
+        const limit = parseInt(req.query.limit) || 1; // obtiene el límite de elementos por página de la consulta, por defecto 1
 
-        if (page < 1 || limit < 1) {
+        if (page < 1 || limit < 1) { // verifica que los valores de página y límite sean positivos
             return res.status(400).send({
                 message: "Page and limit must be positive"
             })
         }
 
-        const offset = (page - 1) * limit;
+        const offset = (page - 1) * limit; // calcula el desplazamiento (offset) para la consulta
 
         const { count, rows } = await Usuario.findAndCountAll({
-            attributes: { exclude: ['password'] },
-            limit: limit,
-            offset: offset
+            attributes: { exclude: ['password'] }, //Escluye el campo 'password' de los resultados
+            limit: limit, // establece el límite de elementos por página
+            offset: offset // establece el desplazamiento (offset) para la consulta
         });
 
         res.status(200).send({
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page,
-            itemsPerPage: limit,
-            data: rows
+            totalItems: count, // total de elementos en la base de datos
+            totalPages: Math.ceil(count / limit), // total de páginas
+            currentPage: page, // página actual
+            itemsPerPage: limit, // elementos por página
+            data: rows // datos de los usuarios
         })
 
     } catch (error) {
@@ -112,7 +112,7 @@ const login = async(req, res) => {
             id: usuario.id,
             nombre: usuario.nombre,
             mail: usuario.mail
-        }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        }, process.env.JWT_SECRET, { expiresIn: "1d" }); // acá es donde creo el token utilizando la clave secreta de la variable de entorno
         res.status(200).send({ token });
     } catch (error) {
         res.status(500).send({
@@ -123,7 +123,7 @@ const login = async(req, res) => {
     }
 }
 
-module.exports = {
+module.exports = { // exporta las siguientes funciones para q puedan ser utilizadas en otros archivos del proyecto
     register,
     update,
     list,

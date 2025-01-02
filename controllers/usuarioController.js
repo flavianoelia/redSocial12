@@ -53,8 +53,8 @@ const update = async(req, res) => {
             usuario.password = password;
         }
 
-        await usuario.save(); // Sequelize activará el hook `beforeUpdate` si es necesario
-
+        await usuario.save(); 
+// Sequelize activará el hook `beforeUpdate` si es necesario
         res.status(200).send(usuario);
     } catch (error) {
         res.status(400).send({ error: error.message });

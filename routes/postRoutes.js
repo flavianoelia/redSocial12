@@ -9,7 +9,7 @@ const auth = require("../middlewares/authmiddleware");
  * /posts/create:
  *   post:
  *     tags: [Posts]
- *     summary: Crear una nueva publicación
+ *     summary: Create new post
  *     requestBody:
  *       required: true
  *       content:
@@ -37,7 +37,7 @@ router.post("/create", auth, postController.createPost);
  * /posts/list:
  *   get:
  *     tags: [Posts]
- *     summary: Listar todas las publicaciones
+ *     summary: List all post
  *     responses:
  *       200:
  *         description: Lista de publicaciones obtenida exitosamente
@@ -72,7 +72,7 @@ router.get("/list", auth, postController.listPosts);
  * /posts/{id}:
  *   put:
  *     tags: [Posts]
- *     summary: Modificar una publicación existente
+ *     summary: Modify an existing post
  *     parameters:
  *       - name: id
  *         in: path
@@ -109,7 +109,7 @@ router.put("/:id", auth, postController.updatePost);
  * /posts/{id}:
  *   delete:
  *     tags: [Posts]
- *     summary: Eliminar una publicación existente
+ *     summary: Delete an existing post
  *     parameters:
  *       - name: id
  *         in: path
@@ -133,7 +133,7 @@ router.delete("/:id", auth, postController.deletePost);
  * /posts/{id}:
  *   get:
  *     tags: [Posts]
- *     summary: Ver una publicación específica
+ *     summary: View a specific post
  *     parameters:
  *       - name: id
  *         in: path
@@ -176,7 +176,7 @@ router.get("/:id", auth, postController.getPost);
  * /posts/user-posts/{id}:
  *   get:
  *     tags: [Posts]
- *     summary: Ver las publicaciones de un usuario determinado
+ *     summary: View posts from a given user
  *     parameters:
  *       - name: id
  *         in: path

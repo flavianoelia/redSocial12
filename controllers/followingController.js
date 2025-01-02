@@ -6,7 +6,7 @@ const follow = async (req, res) => { // para crear la nueva relación de seguimi
     const id_usuario = req.user.id; // toma de middleware el id del usuario autenticado
     const { id_usuario_seguido } = req.body; //para extraer el id del cuerpo de la solicitud
 
-    if (id_usuario === id_usuario_seguido) { //condición para q no pueda seguirse s si mismo
+    if (id_usuario == id_usuario_seguido) { //condición para q no pueda seguirse a si mismo
         return res.status(400).send({ message: "No puedes seguirte a ti mismo" });
     }
 

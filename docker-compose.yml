@@ -1,24 +1,34 @@
-version: '3'
+
 services:
   db:
     image: mysql:8.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: mi_db
+      MYSQL_DATABASE: db_final
     ports:
       - "3306:3306"
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/mysql # Usa el volumen db-data para persistir los datos de la base de datos
 
   api:
     build: .
-    image: luirro777/mi-api-rest:1.0
+    image: flavianoelia/mi-api-rest:1.0 # mi usurio de Docker Hub
     container_name: mi-api-rest-container
     ports:
-      - "3000:3000"    
+      - "3000:3000"
     depends_on:
       - db
+    environment:
+      - NODE_ENV=production # Configuración del entorno
+      - PORT=3000
+      - JWT_SECRET=1234
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=1234
+      - DB_NAME=db_final
+    volumes:
+      - ./uploads:/app/uploads # Persistir la carpeta de uploads
 
 volumes:
   db-data:

@@ -9,8 +9,13 @@ const register = async(req, res) => {
     if (!nombre || !mail || !nickname || !password) {
         return res.status(400).send({ message: "Faltan datos de completar" });
     }
-    try {
-        const usuario = await Usuario.create(req.body);
+    try {     
+        const usuario = await Usuario.create({
+            nombre,
+            mail,
+            nickname,
+            password //pasa la contraseña en texto plano, el hook la encriptará
+        });
         res.status(201).send(usuario);
     } catch (error) {
         if (error.name === "SequelizeUniqueConstraintError") {
@@ -32,32 +37,24 @@ const update = async(req, res) => {
         if (req.file) {
             avatarPath = `uploads/avatars/${req.file.filename}`
         }
-        //console.log(avatarPath)
-
-        // Buscar el usuario por id
         const usuario = await Usuario.findByPk(id);
         if (!usuario) {
             return res.status(404).send({ error: 'Usuario no encontrado' });
         }
-
         // Actualizar los campos
-        usuario.nombre = nombre;
-        usuario.nickname = nickname;
-        usuario.mail = mail;
-        if (avatarPath) {
-            usuario.avatar = avatarPath; // Guardar la ruta del avatar
-        }
-
-        // Solo actualizar la contraseña si fue proporcionada
+        usuario.nombre = nombre || usuario.nombre;
+        usuario.nickname = nickname || usuario.nickname;
+        usuario.mail = mail || usuario.mail;
         if (password) {
-            usuario.password = password;
+            usuario.password = password ? await bcrypt.hash(password, 10) : usuario.password; // El hook beforeUpdate lo encriptará solo si se envía
         }
-
+        if (avatarPath) {
+            usuario.avatar = avatarPath; 
+        }
         await usuario.save(); 
-// Sequelize activará el hook `beforeUpdate` si es necesario
         res.status(200).send(usuario);
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        res.status(500).send({ error: 'Error al actualizar usuario', details: error.message });
     }
 };
 
@@ -95,19 +92,16 @@ const list = async(req, res) => {
 
 const login = async(req, res) => {
     const { mail, password } = req.body;
-
     try {
-        //1 - Constatar que existe una cuenta con ese mail
         const usuario = await Usuario.findOne({ where: { mail } });
         if (!usuario) {
-            return res.status(404).send({ message: "Usuario no encontrada" });
+            return res.status(404).send({ message: "Usuario no encontrado" });
         }
-        //2 - Verificar password
         const isMatch = await bcrypt.compare(password, usuario.password);
         if (!isMatch) {
             return res.status(400).send({ message: "Password incorrecto" });
         }
-        //3 - Crear token (guarda id, nombre y mail)
+        // Crear token (guarda id, nombre y mail)
         const token = jwt.sign({
             id: usuario.id,
             nombre: usuario.nombre,

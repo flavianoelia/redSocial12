@@ -1,3 +1,6 @@
+// Configuración de variables de entorno
+require('dotenv').config(); // importa el módulo dotenv para cargar variables de entorno desde un archivo .env
+
 // importación de módulos
 const express = require("express"); // importa el framework express para crear el servidor
 const bodyParser = require("body-parser"); // el middleware body-parser para parsear el cuerpo de las solicitudes
@@ -12,8 +15,6 @@ const usuarioRouter = require("./routes/usuarioRoutes");// importa las rutas par
 const followingRouter = require("./routes/followingRoutes"); // importa las rutas para manejar relaciones de seguimiento
 const postRouter = require("./routes/postRoutes"); // importa las rutas para manejar publicaciones
 
-// Configuración de variables de entorno
-require('dotenv').config(); // importa el módulo dotenv para cargar variables de entorno desde un archivo .env
 
 //inicialización de la aplicación express
 const app = express(); // crea una instancia de la aplicación express

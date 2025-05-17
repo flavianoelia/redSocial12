@@ -4,6 +4,11 @@ const path = require('path'); // Es un módulo nativo de Node.js utilizado para 
 // Configuración del almacenamiento de imágenes con multer
 const storage = multer.diskStorage({ // configura el almacenamiento en disco para los archivos subidos
     destination: function(req, file, cb) { // define la carpeta de destino para las imágenes subidas
+        const fs = require('fs');    // importa el módulo fs para trabajar con el sistema de archivos
+        const dir = 'uploads/avatars';
+        if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+  }
         cb(null, 'uploads/avatars'); // función de callback devuelve la llamada q se utiliza para indicar a multer dónde almacenar los archivos
     }, // el primer argumento null es para el error, indica que no hay ningún error y q el proceso puede continuar, degundo argumento, es la ruta al directorio donde se almacenarán los archivos
     filename: function(req, file, cb) { // define el nombre del archivo subido, utilizando un sufijo único basado en la fecha y un número aleatorio, y manteniendo la extensión original del archivo
@@ -15,14 +20,14 @@ const storage = multer.diskStorage({ // configura el almacenamiento en disco par
 
 // Filtrar archivos para asegurarnos de que solo se suban imágenes
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png/;
+    const allowedTypes = /jpeg|jpg|png|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 
     if (mimetype && extname) {
         return cb(null, true);
     } else {
-        cb(new Error('Solo se permiten imágenes en formato JPEG, JPG o PNG'));
+        cb(new Error('Solo se permiten imágenes en formato JPEG, JPG, PNG o WEBP'), false);
     }
 };
 

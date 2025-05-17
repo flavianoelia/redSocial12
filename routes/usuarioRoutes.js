@@ -185,6 +185,46 @@ router.get("/list", usuarioController.list);
 */
 router.post("/login", usuarioController.login);
 
+/**
+ * @swagger
+ * /usuarios/search:
+ *   get:
+ *     tags: [Usuarios]
+ *     summary: Search users by name or nickname
+ *     parameters:
+ *       - name: q
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search term to match against name or nickname
+ *     responses:
+ *       200:
+ *         description: A list of matching users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   nombre:
+ *                     type: string
+ *                   nickname:
+ *                     type: string
+ *                   mail:
+ *                     type: string
+ *                     format: email
+ *                   avatar:
+ *                     type: string
+ *       400:
+ *         description: Bad request - missing search parameter
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/search", usuarioController.search);
 
 
 module.exports = router;

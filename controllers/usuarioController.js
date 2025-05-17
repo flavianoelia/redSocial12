@@ -2,6 +2,7 @@ const db = require('../models');
 const Usuario = db.Usuario;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');  
 
 
 const register = async(req, res) => {
@@ -117,9 +118,31 @@ const login = async(req, res) => {
     }
 }
 
+const search = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q) {
+            return res.status(400).send({ error: 'Parámetro de búsqueda requerido' });
+        }
+        const usuarios = await Usuario.findAll({
+            where: {
+                [Op.or]: [
+                    { nombre: { [Op.like]: `%${q}%` } },
+                    { nickname: { [Op.like]: `%${q}%` } },
+                ],
+            },
+            attributes: { exclude: ['password'] },
+            limit: 10,
+        });
+        res.status(200).send(usuarios);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
 module.exports = { // exporta las siguientes funciones para q puedan ser utilizadas en otros archivos del proyecto
     register,
     update,
     list,
-    login
+    login,
+    search
 };

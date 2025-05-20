@@ -24,6 +24,9 @@ const Following = (sequelize, Sequelize) => { // recibe la instancia de sequeliz
             unique: true, // la clave principal de following será la comnbinación de id_usuario y la de id_usuario seguido
             fields: ['id_usuario', 'id_usuario_seguido'], // para evitar repeticiones
         }, ],
+        primaryKey:{
+            fields: ['id_usuario', 'id_usuario_seguido'], // establece la clave primaria como la combinación de id_usuario y id_usuario_seguido
+        },
     });
 };
 

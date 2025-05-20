@@ -2,12 +2,13 @@ const { Sequelize } = require("sequelize"); // de la libreria sequelize traemos 
 const parameters = require("../config/config"); // salgo de la carpeta models con los dos puntos y voy al directorio raíz  entro a la carpeta config y después al archivo config para importas los parametros de configuración
 
 const sequelize = new Sequelize( // Crea una instancia de Sequelize utilizando los parámetros de configuración importados. Estos parámetros incluyen el nombre de la base de datos, el nombre de usuario, la contraseña, el host y el dialecto de la base de datos.
-
-    parameters.database,
-    parameters.username,
-    parameters.password, {
-        host: parameters.host,
-        dialect: parameters.dialect,
+    parameters.development.database,
+    parameters.development.username,
+    parameters.development.password, 
+    {
+        host: parameters.development.host,
+        port: parameters.development.port,
+        dialect: parameters.development.dialect
     }
 );
 

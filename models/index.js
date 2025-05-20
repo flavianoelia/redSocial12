@@ -41,5 +41,10 @@ db.Usuario.belongsToMany(db.Usuario, {
     otherKey: 'id_usuario' // Clave foránea que referencia al usuario que esta siendo seguido
 });
 
+db.Usuario.hasMany(db.Following, { 
+    foreignKey: 'id_usuario', 
+    as: 'Followings', 
+    scope: { id_usuario_seguido: { [Sequelize.Op.ne]: Sequelize.col('id_usuario') } } 
+}); // Agrega esta relación para contar solo los seguimientos válidos (excluye auto-seguimiento) });
 
 module.exports = db; // Exporta el objeto db que contiene los modelos y la instancia de Sequelize para que puedan ser utilizados en otras partes de la aplicación.

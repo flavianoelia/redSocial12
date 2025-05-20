@@ -88,6 +88,51 @@ router.put("/me", auth, upload.single('avatar'), usuarioController.update);
 
 /**
  * @swagger
+ * /usuarios/me:
+ *   get:
+ *     tags: [Usuarios]
+ *     summary: Get current user's profile
+ *     security:
+ *       - ApiTokenAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: ID of the user
+ *                 nombre:
+ *                   type: string
+ *                   description: User name
+ *                 nickname:
+ *                   type: string
+ *                   description: User nickname
+ *                 mail:
+ *                   type: string
+ *                   format: email
+ *                   description: User email
+ *                 avatar:
+ *                   type: string
+ *                   description: User avatar URL
+ *                 publicaciones:
+ *                   type: integer
+ *                   description: Number of user posts
+ *                 contactos:
+ *                   type: integer
+ *                   description: Number of user contacts
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/me", auth, usuarioController.getMe);
+
+/**
+ * @swagger
  * /usuarios/list:
  *   get:
  *     tags: [Usuarios]

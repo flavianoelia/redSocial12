@@ -3,10 +3,12 @@ const Post = db.Post;
 
 const createPost = async (req, res) => {
     const id_usuario = req.user.id; // Usuario autenticado
-    const { titulo, contenido } = req.body;
+    const { titulo, contenido, autor, abstract} = req.body;
+    const imagen = req.files && req.files['imagen'] ? `/uploads/posts/${req.files['imagen'][0].filename}` : null;
+    const pdf = req.files && req.files['pdf'] ? `/uploads/pdfs/${req.files['pdf'][0].filename}` : null;
 
     try {
-        const post = await db.Post.create({ id_usuario, titulo, contenido });
+        const post = await db.Post.create({ id_usuario, titulo, contenido, autor, abstract, imagen, pdf });
         res.status(201).send(post);
     } catch (error) {
         res.status(500).send({ error: error.message });
@@ -31,6 +33,8 @@ const updatePost = async (req, res) => {
     const id_usuario = req.user.id; // Usuario autenticado
     const { id } = req.params; // ID del post
     const { titulo, contenido } = req.body;
+    const imagen = req.files && req.files['imagen'] ? `/uploads/posts/${req.files['imagen'][0].filename}` : undefined;
+    const pdf = req.files && req.files['pdf'] ? `/uploads/pdfs/${req.files['pdf'][0].filename}` : undefined;
 
     try {
         const post = await db.Post.findOne({ where: { id, id_usuario } });
@@ -41,6 +45,10 @@ const updatePost = async (req, res) => {
 
         post.titulo = titulo || post.titulo;
         post.contenido = contenido || post.contenido;
+        post.autor = autor || post.autor;
+        post.abstract = abstract || post.abstract;
+        if (imagen !== undefined) post.imagen = imagen;
+        if (pdf !== undefined) post.pdf = pdf;
 
         await post.save();
         res.status(200).send(post);

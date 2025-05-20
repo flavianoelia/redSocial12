@@ -1,5 +1,12 @@
+const { Sequelize } = require('sequelize');
+
 const Post = (sequelize, Sequelize) => {
     return sequelize.define("Post", {
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
         id_usuario: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -18,8 +25,25 @@ const Post = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false,
         },
+        autor: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        abstract: { 
+            type: Sequelize.TEXT,
+            allowNull: true,
+        },
+        imagen: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        pdf: { 
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
     }, {
-        timestamps: false, // true si queremos q se vea en swagger el tiempo
+        timestamps: true, 
+        tableName: 'posts'
     });
 };
 

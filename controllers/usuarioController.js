@@ -89,7 +89,7 @@ const list = async(req, res) => {
     } catch (error) {
         res.status(500).send(error.message);
     }
-}
+};
 
 const login = async(req, res) => {
     const { mail, password } = req.body;
@@ -116,7 +116,7 @@ const login = async(req, res) => {
             detalles: error.message
         });
     }
-}
+};
 
 const search = async (req, res) => {
     try {
@@ -139,10 +139,42 @@ const search = async (req, res) => {
         res.status(500).send({ error: error.message });
     }
 };
+
+const getMe = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const usuario = await Usuario.findByPk(id, {
+            attributes: { exclude: ['password'] },
+        });
+        if (!usuario) {
+            return res.status(404).send({ error: 'Usuario no encontrado' });
+        }
+        const numPosts = await usuario.countPosts();
+        const numContacts = await usuario.countFollowings({
+            where: {
+                id_usuario: id 
+            }
+        });
+        res.status(200).send({
+            id: usuario.id,
+            nombre: usuario.nombre,
+            nickname: usuario.nickname,
+            mail: usuario.mail,
+            avatar: usuario.avatar,
+            publicaciones: numPosts,
+            contactos: numContacts,
+        });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
+
+
 module.exports = { // exporta las siguientes funciones para q puedan ser utilizadas en otros archivos del proyecto
     register,
     update,
     list,
     login,
-    search
+    search,
+    getMe
 };
